@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import BabyUI from '../../src';
+import BugBabyUI from '../../src';
 import App from './App.vue';
 
-createApp(App).use(BabyUI).mount('#app');
+createApp(App).use(BugBabyUI).mount('#app');

@@ -11,7 +11,6 @@ export { default as BbDatePicker } from './components/BbDatePicker';
 export { default as BbDateRangeFieldPicker } from './components/BbDateRangeFieldPicker';
 export { default as BbDateRangePicker } from './components/BbDateRangePicker';
 export { default as BbDialog, showBbDialog } from './components/BbDialog';
-export { default as BbFilesPicker } from './components/BbFilesPicker';
 export { default as BbFloatingButton } from './components/BbFloatingButton';
 export { default as BbImagesPicker, showBbImagesPicker } from './components/BbImagesPicker';
 export { default as BbList } from './components/BbList';
@@ -31,7 +30,6 @@ import BbDatePicker from './components/BbDatePicker';
 import BbDateRangeFieldPicker from './components/BbDateRangeFieldPicker';
 import BbDateRangePicker from './components/BbDateRangePicker';
 import BbDialog from './components/BbDialog';
-import BbFilesPicker from './components/BbFilesPicker';
 import BbFloatingButton from './components/BbFloatingButton';
 import BbImagesPicker from './components/BbImagesPicker';
 import BbList from './components/BbList';
@@ -52,7 +50,6 @@ const components = [
   BbDateRangeFieldPicker,
   BbDateRangePicker,
   BbDialog,
-  BbFilesPicker,
   BbFloatingButton,
   BbImagesPicker,
   BbList,
@@ -67,7 +64,7 @@ const components = [
   BbTabs,
 ];
 
-const BabyUI: Plugin = {
+const BugBabyUI: Plugin = {
   install(app: App) {
     app.provide('$dayjs', dayjs);
     components.forEach((component) => {
@@ -81,4 +78,4 @@ const BabyUI: Plugin = {
   },
 };
 
-export default BabyUI;
+export default BugBabyUI;

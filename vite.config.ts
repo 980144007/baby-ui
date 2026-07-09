@@ -35,7 +35,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
-      apis: resolve(__dirname, 'src/apis'),
       stores: resolve(__dirname, 'src/stores'),
       components: resolve(__dirname, 'src/components'),
       common: resolve(__dirname, 'src'),

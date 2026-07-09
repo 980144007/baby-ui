@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      'baby-ui': new URL('../src/index.ts', import.meta.url).pathname,
+      'bugbaby-ui': new URL('../src/index.ts', import.meta.url).pathname,
     },
   },
 });

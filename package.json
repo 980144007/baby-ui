@@ -1,0 +1,54 @@
+{
+  "name": "baby-ui",
+  "version": "0.0.1",
+  "description": "A Vue 3 component library.",
+  "type": "module",
+  "private": false,
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./style": "./dist/styles/index.css",
+    "./*": {
+      "types": "./dist/components/*/index.d.ts",
+      "import": "./dist/components/*/index.js"
+    }
+  },
+  "sideEffects": [
+    "*.css",
+    "*.less",
+    "**/style/*"
+  ],
+  "scripts": {
+    "dev": "vite --config playground/vite.config.ts",
+    "build": "vue-tsc -b && vite build",
+    "type-check": "vue-tsc -b --noEmit",
+    "prepublishOnly": "pnpm build"
+  },
+  "keywords": [
+    "vue3",
+    "components",
+    "ui"
+  ],
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^26.1.0",
+    "@vitejs/plugin-vue": "^6.0.7",
+    "typescript": "^6.0.3",
+    "vite": "^8.1.3",
+    "vite-plugin-dts": "^4.5.4",
+    "vue": "^3.5.39",
+    "vue-tsc": "^3.3.7",
+    "less": "^4.6.7"
+  }
+}

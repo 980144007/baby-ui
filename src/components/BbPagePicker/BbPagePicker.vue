@@ -52,6 +52,7 @@ const emit = defineEmits(["update:modelValue", "confirm", "onVisible"]);
 
 const showPicker = ref(false);
 const pickerValue = ref([]);
+const cmList = ref(null);
 
 const selectedObjList = computed(() => {
     // console.log(88,props, props.options)
@@ -119,13 +120,11 @@ function myOnRefresh() {
 }
 
 function refresh() {
-    const cmList = $refs?.cmList;
-    cmList?.refresh();
+    cmList.value?.refresh();
 }
 
 function check(isSingle = false) {
-    const cmList = $refs?.cmList;
-    cmList?.check(isSingle);
+    cmList.value?.check(isSingle);
 }
 
 onMounted(() => {

@@ -66,17 +66,17 @@ const selectable = computed(() => {
 watch(showPicker, (n) => {
     emit("onVisible", n);
     if(!n) return;
-    pickerValue.splice(0, pickerValue.length, ...$cloneDeep(!props.multiple ? [props.modelValue] : props.modelValue || []));
+    pickerValue.value.splice(0, pickerValue.value.length, ...$cloneDeep(!props.multiple ? [props.modelValue] : props.modelValue || []));
 });
 
 function clear() {
-    pickerValue.splice(0, pickerValue.length);
+    pickerValue.value.splice(0, pickerValue.value.length);
     onConfirm(false);
 }
 
 function onConfirm(show) {
     // console.log(22,pickerValue)
-    const val = props.multiple ? $cloneDeep(pickerValue) : $cloneDeep(pickerValue?.[0])
+    const val = props.multiple ? $cloneDeep(pickerValue.value) : $cloneDeep(pickerValue.value?.[0])
     emit("update:modelValue", val);
     const valList = $cloneDeep(!props.multiple ? [val] : val);
     const valueList = props.options.filter(({value}) => valList.includes(value)) || [];
@@ -90,31 +90,31 @@ function onShowChange(show = !showPicker.value) {
 }
 
 function onOptionClick({value}) {
-    const list = pickerValue;
+    const list = pickerValue.value;
     
     const index = list.findIndex(item => {
         return item === value;
     })
     if(index > -1) {
         if(!props.multiple) {
-            pickerValue.splice(0, 1);
+            pickerValue.value.splice(0, 1);
         } else {
-            pickerValue.splice(index, 1);
+            pickerValue.value.splice(index, 1);
         }
         
         return;
     }
     if(!props.multiple) {
-        pickerValue.splice(0, 1, value);
+        pickerValue.value.splice(0, 1, value);
     } else {
-        pickerValue.push(value);
+        pickerValue.value.push(value);
     }
     
     // console.log(item)
 }
 
 function myOnRefresh() {
-    pickerValue.splice(0, pickerValue.length, ...$cloneDeep(!props.multiple ? [props.modelValue] : props.modelValue || []));
+    pickerValue.value.splice(0, pickerValue.value.length, ...$cloneDeep(!props.multiple ? [props.modelValue] : props.modelValue || []));
     return props.onRefresh?.() || undefined;
 }
 

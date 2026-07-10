@@ -1,5 +1,5 @@
 <script setup lang="ts" name="BbDateRangePicker">
-const $dayjs = inject("$dayjs");
+import dayjs from "dayjs";
 const props = defineProps({
   title: {
     type: String,
@@ -46,10 +46,10 @@ watch(showPicker, (n) => {
     endDate: end
   } = value.value;
   if (start) {
-    startDate.value = $dayjs(start).format("YYYY-MM-DD").split("-");
+    startDate.value = dayjs(start).format("YYYY-MM-DD").split("-");
   }
   if (end) {
-    endDate.value = $dayjs(end).format("YYYY-MM-DD").split("-");
+    endDate.value = dayjs(end).format("YYYY-MM-DD").split("-");
   }
 })
 function onConfirm() {

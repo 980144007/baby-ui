@@ -1,6 +1,6 @@
 {
   "name": "@sunshine-baby/baby-ui",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A Vue 3 component library.",
   "type": "module",
   "private": false,
@@ -30,7 +30,8 @@
     "dev": "vite --config playground/vite.config.ts",
     "build": "vite build",
     "type-check": "vue-tsc -b --noEmit",
-    "prepublishOnly": "pnpm build"
+    "sync-publish-version": "node scripts/sync-publish-version.mjs",
+    "prepublishOnly": "pnpm sync-publish-version && pnpm build"
   },
   "publishConfig": {
     "access": "public",

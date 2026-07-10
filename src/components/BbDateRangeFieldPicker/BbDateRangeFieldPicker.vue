@@ -1,5 +1,5 @@
 <template>
-  <div class="bb-BbDateRangeFieldPicker-container">
+  <div v-if="showField" class="bb-BbDateRangeFieldPicker-container">
     <template v-if="mode == 1">
       <div class="label">{{ labels[0] }}</div>
       <div class="col" style="margin-right: 8px;">
@@ -9,7 +9,7 @@
             {{
               textFormatter(
                 modelValue.startDate
-                  ? $dayjs(modelValue.startDate).format("YYYY/MM/DD")
+                  ? dayjs(modelValue.startDate).format("YYYY/MM/DD")
                   : ""
               )
             }}
@@ -26,7 +26,7 @@
             {{
               textFormatter(
                 modelValue.endDate
-                  ? $dayjs(modelValue.endDate).format("YYYY/MM/DD")
+                  ? dayjs(modelValue.endDate).format("YYYY/MM/DD")
                   : ""
               )
             }}
@@ -45,7 +45,7 @@
             {{
               textFormatter(
                 modelValue.startDate
-                  ? $dayjs(modelValue.startDate).format("YYYY/MM/DD")
+                  ? dayjs(modelValue.startDate).format("YYYY/MM/DD")
                   : ""
               )
             }}
@@ -62,7 +62,7 @@
             {{
               textFormatter(
                 modelValue.endDate
-                  ? $dayjs(modelValue.endDate).format("YYYY/MM/DD")
+                  ? dayjs(modelValue.endDate).format("YYYY/MM/DD")
                   : ""
               )
             }}
@@ -76,21 +76,30 @@
     <template v-else-if="mode == 3">
       <div class="col" @click="onValueClick()">
         <input class="value-input" type="text" :placeholder="labels[0]" :value="modelValue.startDate || modelValue.endDate ? `${modelValue.startDate
-            ? $dayjs(modelValue.startDate).format('YYYY/MM/DD')
+            ? dayjs(modelValue.startDate).format('YYYY/MM/DD')
             : ''}-${modelValue.endDate
-            ? $dayjs(modelValue.endDate).format('YYYY/MM/DD')
+            ? dayjs(modelValue.endDate).format('YYYY/MM/DD')
             : ''}` : ''" readonly />
       </div>
     </template>
-    <BbDateRangePicker v-model="pickerValue" v-model:show="showDatePicker" :defaultIndex="defaultIndex" :maxDate="maxDate" :minDate="minDate" />
   </div>
+  <BbDateRangePicker v-model="pickerValue" v-model:show="showDatePicker" :defaultIndex="defaultIndex" :maxDate="maxDate" :minDate="minDate" @confirm="onConfirm" />
 </template>
 <script setup lang="ts">
-const $dayjs = inject("$dayjs");
+import dayjs from "dayjs";
+import BbDateRangePicker from "../BbDateRangePicker/BbDateRangePicker.vue";
 const props = defineProps({
   disabled: {
     type: Boolean,
     default: false,
+  },
+  show: {
+    type: Boolean,
+    default: undefined,
+  },
+  showField: {
+    type: Boolean,
+    default: true,
   },
   modelValue: {
     type: Object,
@@ -120,22 +129,50 @@ const props = defineProps({
     default: new Date(new Date().getFullYear() - 10, 0, 1),
   },
 });
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "update:show", "confirm", "cancel", "closed"]);
 
 const defaultIndex = ref(0);
-const showDatePicker = ref(false);
+const innerShowDatePicker = ref(false);
+const isShowControlled = computed(() => typeof props.show === "boolean");
+const showDatePicker = computed({
+  get() {
+    return isShowControlled.value ? props.show : innerShowDatePicker.value;
+  },
+  set(value) {
+    if (!isShowControlled.value) {
+      innerShowDatePicker.value = value;
+    }
+    emit("update:show", value);
+    if (!value) {
+      emit("closed");
+    }
+  },
+});
 const pickerValue = computed({
   get: () => props.modelValue,
   set: (val) => {
-    console.log(23, val);
     emit("update:modelValue", val);
   },
 });
+
+watch(
+  () => props.show,
+  (value) => {
+    if (value) {
+      defaultIndex.value = 0;
+    }
+  },
+  { immediate: true }
+);
 
 function onValueClick(isStartDate: boolean = true) {
   if (props.disabled) return;
   defaultIndex.value = isStartDate ? 0 : 1;
   showDatePicker.value = true;
+}
+
+function onConfirm(value) {
+  emit("confirm", value);
 }
 </script>
 <style lang="less" scoped>

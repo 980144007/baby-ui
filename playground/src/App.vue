@@ -12,7 +12,7 @@ const options = [
 
 <template>
   <main class="demo-page">
-    <h1>BugBaby UI</h1>
+    <h1>SunshineBaby UI</h1>
 
     <section class="demo-section">
       <h2>组件示例</h2>

@@ -64,7 +64,7 @@ const components = [
   BbTabs,
 ];
 
-const BugBabyUI: Plugin = {
+const SunshineBabyUI: Plugin = {
   install(app: App) {
     app.provide('$dayjs', dayjs);
     components.forEach((component) => {
@@ -78,4 +78,4 @@ const BugBabyUI: Plugin = {
   },
 };
 
-export default BugBabyUI;
+export default SunshineBabyUI;

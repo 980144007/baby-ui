@@ -287,7 +287,7 @@ function openFunctionPicker() {
     <section class="demo-section rotate-card">
       <h2>13. BbRotate</h2>
       <p class="hint">固定在当前视口右下角的圆形浮动按钮。</p>
-      <BbRotate text="回顶" right="18px" bottom="92px" size="46px" z-index="20" />
+      <BbRotate text="回顶" right="18px" bottom="92px" size="46px" z-index="20" remember-position position-key="playground-rotate" />
     </section>
 
     <section class="demo-section floating-card">

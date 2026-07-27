@@ -7,6 +7,7 @@ import {
   BbDateRangeFieldPicker,
   BbDialog,
   BbFloatingButton,
+  BbFloatingFind,
   BbImagesPicker,
   BbList,
   BbLoading as BbLoadingPlugin,
@@ -183,7 +184,7 @@ function openFunctionPicker() {
     <header class="hero-card">
       <p class="eyebrow">SunshineBaby UI</p>
       <h1>Playground 全组件示例</h1>
-      <p>覆盖 src/index.ts 导出的 17 个组件，所有示例均使用 <code>../../src</code> 导入。</p>
+      <p>覆盖 src/index.ts 导出的 18 个组件，所有示例均使用 <code>../../src</code> 导入。</p>
     </header>
 
     <section class="demo-section">
@@ -270,7 +271,7 @@ function openFunctionPicker() {
     </section>
 
     <section class="demo-section">
-      <h2>12. BbLoading</h2>
+      <h2>11. BbLoading</h2>
       <div class="action-row">
         <BbLoading size="24px" type="spinner" />
         <van-button size="small" type="primary" :disabled="!hasLoadingPlugin" @click="openLoading">打开遮罩加载</van-button>
@@ -279,12 +280,12 @@ function openFunctionPicker() {
     </section>
 
     <section class="demo-section">
-      <h2>13. BbLoadingIcon</h2>
+      <h2>12. BbLoadingIcon</h2>
       <BbLoadingIcon size="26px" text="Loading" />
     </section>
 
     <section class="demo-section rotate-card">
-      <h2>14. BbRotate</h2>
+      <h2>13. BbRotate</h2>
       <p class="hint">固定在当前视口右下角的圆形浮动按钮。</p>
       <BbRotate text="回顶" right="18px" bottom="92px" size="46px" z-index="20" />
     </section>
@@ -294,6 +295,15 @@ function openFunctionPicker() {
       <BbFloatingButton>
         <van-button class="floating-button inline-floating" size="small" type="primary" @click="floatingCount++">浮动 {{ floatingCount }}</van-button>
       </BbFloatingButton>
+    </section>
+
+    <section class="demo-section find-card">
+      <h2>15. BbFloatingFind</h2>
+      <p class="hint">点击右下角搜索按钮，输入“宝宝”“记录”等关键词，可在当前示例页内查找并滚动定位匹配内容。</p>
+      <div class="result-card" data-find-item>
+        宝宝资料、喂养记录、睡眠记录和成长曲线都可作为查找候选内容。
+      </div>
+      <BbFloatingFind search-root=".demo-page" remember-position position-key="playground-floating-find" :z-index="30" />
     </section>
 
     <section class="demo-section tabs-section">
@@ -319,7 +329,7 @@ function openFunctionPicker() {
     </section>
 
     <section class="demo-section">
-      <h2>17. BbTable</h2>
+      <h2>18. BbTable</h2>
       <div class="table-scroll">
         <BbTable :columns="tableColumns" :data-list="tableData" size="small" :auto-summary="1" />
       </div>

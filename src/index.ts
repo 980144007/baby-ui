@@ -11,6 +11,7 @@ export { default as BbDatePicker } from './components/BbDatePicker/BbDatePicker.
 export { BbDateRangeFieldPicker, showBbDateRangePicker, showBbDateRangeFieldPicker } from './components/BbDateRangeFieldPicker';
 export { BbDialog, showBbDialog } from './components/BbDialog';
 export { default as BbFloatingButton } from './components/BbFloatingButton/BbFloatingButton.vue';
+export { BbFloatingFind } from './components/BbFloatingFind';
 export { BbImagesPicker, showBbImagesPicker } from './components/BbImagesPicker';
 export { default as BbList } from './components/BbList/BbList.vue';
 export { default as BbLoading } from './components/BbLoading';
@@ -29,6 +30,7 @@ import BbDatePicker from './components/BbDatePicker';
 import BbDateRangeFieldPicker from './components/BbDateRangeFieldPicker';
 import BbDialog from './components/BbDialog';
 import BbFloatingButton from './components/BbFloatingButton';
+import BbFloatingFind from './components/BbFloatingFind';
 import BbImagesPicker from './components/BbImagesPicker';
 import BbList from './components/BbList';
 import BbLoading from './components/BbLoading';
@@ -48,6 +50,7 @@ const components = [
   BbDateRangeFieldPicker,
   BbDialog,
   BbFloatingButton,
+  BbFloatingFind,
   BbImagesPicker,
   BbList,
   BbLoading,

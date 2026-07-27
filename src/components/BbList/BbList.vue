@@ -1,4 +1,4 @@
-<script setup lang="ts" name="BbList">
+<script setup name="BbList">
 const props = defineProps({
   useBackTop: {
     type: Boolean,
@@ -34,13 +34,12 @@ const props = defineProps({
   delay: {
     type: [Number, String],
     default: 200,
-    validator(str: unknown) {
-      const delay = Number(str);
-      if (Number.isNaN(delay)) {
+    validator(str) {
+      if (isNaN(str)) {
         console.warn("延迟时间为>=0的数字");
         return false;
       }
-      return delay >= 0;
+      return str >= 0;
     }
   }
 })
@@ -266,8 +265,16 @@ defineExpose({
   height: 100%;
   flex-grow: 1;
   overflow-y: auto;
+
   :deep(.van-pull-refresh__head) {
     display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  :deep(.van-list__loading) {
+    display: flex;
+    align-items: center;
     justify-content: center;
   }
 }

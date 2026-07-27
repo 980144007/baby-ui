@@ -18,6 +18,7 @@ declare module 'vue' {
     BbDateRangePicker: typeof import('./src/components/BbDateRangePicker/BbDateRangePicker.vue')['default']
     BbDialog: typeof import('./src/components/BbDialog/BbDialog.vue')['default']
     BbFloatingButton: typeof import('./src/components/BbFloatingButton/BbFloatingButton.vue')['default']
+    BbFloatingFind: typeof import('./src/components/BbFloatingFind/BbFloatingFind.vue')['default']
     BbImagesPicker: typeof import('./src/components/BbImagesPicker/BbImagesPicker.vue')['default']
     BbList: typeof import('./src/components/BbList/BbList.vue')['default']
     BbLoadingIcon: typeof import('./src/components/BbLoadingIcon/BbLoadingIcon.vue')['default']

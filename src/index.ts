@@ -7,7 +7,7 @@ import { getFileType } from './utils/file';
 
 export { default as Bb3DCube } from './components/Bb3DCube/Bb3DCube.vue';
 export { default as BbCascaderPicker } from './components/BbCascaderPicker/BbCascaderPicker.vue';
-export { default as BbDatePicker } from './components/BbDatePicker/BbDatePicker.vue';
+export { BbDatePicker, showBbDatePicker } from './components/BbDatePicker';
 export { BbDateRangeFieldPicker, showBbDateRangePicker, showBbDateRangeFieldPicker } from './components/BbDateRangeFieldPicker';
 export { BbDialog, showBbDialog } from './components/BbDialog';
 export { default as BbFloatingButton } from './components/BbFloatingButton/BbFloatingButton.vue';

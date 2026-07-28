@@ -22,6 +22,8 @@ export default defineConfig({
     }),
     Components({
       dts: 'components.d.ts',
+      dirs: [],
+      globs: [],
       resolvers: [VantResolver()],
     }),
     dts({

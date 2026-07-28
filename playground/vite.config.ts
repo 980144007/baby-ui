@@ -18,6 +18,8 @@ export default defineConfig({
       resolvers: [VantResolver()],
     }),
     Components({
+      dirs: [],
+      globs: [],
       resolvers: [VantResolver()],
     }),
   ],

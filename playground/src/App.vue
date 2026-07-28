@@ -65,7 +65,9 @@ const currentDoc = computed(() => componentDocs.find((item) => item.name === sel
       </button>
     </nav>
 
-    <component :is="currentDoc.component" :data-find-item="currentDoc.name" />
+    <div v-if="currentDoc" :data-find-item="currentDoc.name">
+      <component :is="currentDoc.component" />
+    </div>
   </main>
 </template>
 

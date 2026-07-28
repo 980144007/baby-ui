@@ -1,24 +1,16 @@
 <script lang="ts">
-export const docMeta = {
-  name: 'BbImagesPicker',
-  category: '表单',
-  summary: '图片选择、预览、删除、上传组件，也可关闭上传返回 base64。',
-  order: 10,
-};
+export const docMeta = { name: 'BbImagesPicker', category: '表单', summary: '图片选择、预览、删除组件，支持单图/多图、本地 base64、函数式触发和只读禁用态。', order: 10 };
 </script>
-
 <script setup lang="ts">
 import { ref } from 'vue';
 import { BbImagesPicker, showBbImagesPicker } from './index';
-
 defineOptions({ name: 'BbImagesPickerDoc' });
-
-const imageList = ref<string[]>([]);
-const functionImageList = ref<string[]>([]);
-function openFunctionImagesPicker() { showBbImagesPicker({ upload: false, multiple: true }).then((value) => { functionImageList.value = value; }).catch(() => undefined); }
+const singleImage = ref<any[]>([]); const multiImages = ref<any[]>([]); const readonlyImages = ref(['https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg']); const imageRef = ref<any>(null); const functionCount = ref(0);
+function openFunctionImagesPicker() { showBbImagesPicker({ upload: false, multiple: true }).then((value) => { functionCount.value = value.length; }).catch(() => undefined); }
 </script>
-
 <template>
-  <section class="doc-page" data-find-item="BbImagesPicker"><div class="doc-header"><p class="eyebrow">表单</p><h2>BbImagesPicker</h2><p>图片选择、预览、删除、上传组件，也可关闭上传返回 base64。</p></div><div class="doc-block"><h3>基础用法</h3><pre><code>&lt;BbImagesPicker v-model=&quot;images&quot; multiple :upload=&quot;false&quot; /&gt;</code></pre></div><div class="doc-block"><h3>Props</h3><div class="api-list"><div class="api-item"><code>modelValue</code><span>图片列表，支持字符串 URL 或对象。</span></div><div class="api-item"><code>colNum</code><span>每行列数，默认 3。</span></div><div class="api-item"><code>multiple</code><span>是否允许多选。</span></div><div class="api-item"><code>readonly / disabled</code><span>只读和禁用控制。</span></div><div class="api-item"><code>upload</code><span>是否调用 $uploadFile 上传；false 时转 base64。</span></div><div class="api-item"><code>returnObject / responseUrlKey</code><span>上传结果返回结构和值字段。</span></div></div></div><div class="doc-block"><h3>v-model / Events / Slots / Methods</h3><div class="tag-list"><span class="doc-tag">v-model</span><span class="doc-tag">cancel</span><span class="doc-tag">description</span><span class="doc-tag">triggerUpload()</span></div></div><div class="doc-block"><h3>函数式 API</h3><div class="api-list"><div class="api-item"><code>showBbImagesPicker(options)</code><span>函数式触发文件选择，返回 Promise&lt;string[]&gt;。</span></div></div></div></section>
-  <section class="demo-section"><h2>BbImagesPicker 示例</h2><p class="hint">关闭真实上传，仅本地选择和预览。</p><BbImagesPicker v-model="imageList" :upload="false" multiple :col-num="3"><template #description="{ index }"><div class="image-desc">图片 {{ index + 1 }}</div></template></BbImagesPicker><div class="action-row"><van-button size="small" plain type="primary" @click="openFunctionImagesPicker">函数式 API</van-button></div><p class="result-text">函数式已选择：{{ functionImageList.length }} 张</p></section>
+  <section class="doc-page" data-find-item="BbImagesPicker"><div class="doc-header"><p class="eyebrow">表单</p><h2>BbImagesPicker</h2><p>BbImagesPicker 用于头像、凭证、相册等图片选择场景。默认会调用全局 $uploadFile 上传；文档示例均设置 upload=false，避免依赖真实接口，此时组件通过 FileReader 返回 base64。multiple=false 适合单图，multiple=true 适合多图；readonly/disabled 会隐藏上传与删除入口，但仍可预览已存在图片。</p></div><div class="doc-block"><h3>基础用法</h3><pre><code>&lt;BbImagesPicker v-model=&quot;images&quot; multiple :upload=&quot;false&quot; :col-num=&quot;3&quot; /&gt;</code></pre></div><div class="doc-block"><h3>Props</h3><div class="api-list"><div class="api-item"><code>modelValue</code><span>图片数据，支持 URL 字符串或 { url } 对象数组；默认 []。</span></div><div class="api-item"><code>colNum</code><span>每行列数；number，默认 3。</span></div><div class="api-item"><code>multiple</code><span>是否多选；boolean，默认 false。</span></div><div class="api-item"><code>readonly / disabled</code><span>只读/禁用时不可新增删除；默认 false。</span></div><div class="api-item"><code>upload</code><span>是否调用 $uploadFile；boolean，默认 true，示例使用 false。</span></div><div class="api-item"><code>params / responseUrlKey / returnObject</code><span>上传参数、响应 URL 字段、是否返回对象；默认 {} / url_friendly_path / false。</span></div></div></div><div class="doc-block"><h3>Events</h3><div class="api-list"><div class="api-item"><code>update:modelValue</code><span>选择或删除图片后更新。</span></div><div class="api-item"><code>cancel</code><span>文件选择取消时触发。</span></div></div></div><div class="doc-block"><h3>Slots</h3><div class="api-list"><div class="api-item"><code>description</code><span>预览图下方说明，参数 item、index、modelIndex。</span></div></div></div><div class="doc-block"><h3>Methods / Expose</h3><div class="tag-list"><span class="doc-tag">triggerUpload()</span></div></div><div class="doc-block"><h3>函数式 API</h3><div class="api-list"><div class="api-item"><code>showBbImagesPicker(options)</code><span>函数式触发文件选择，resolve 图片列表，取消 reject(cancelError)。</span></div></div></div></section>
+  <section class="demo-section"><h2>单图与手动 triggerUpload</h2><BbImagesPicker ref="imageRef" v-model="singleImage" :upload="false" :col-num="1" /><div class="action-row"><van-button size="small" type="primary" @click="imageRef?.triggerUpload()">triggerUpload()</van-button></div></section>
+  <section class="demo-section"><h2>多图与 description 插槽</h2><BbImagesPicker v-model="multiImages" :upload="false" multiple :col-num="3"><template #description="{ index }"><div class="image-desc">第 {{ index + 1 }} 张</div></template></BbImagesPicker></section>
+  <section class="demo-section"><h2>函数式 API / readonly / disabled</h2><div class="action-row"><van-button size="small" plain type="primary" @click="openFunctionImagesPicker">函数式选择</van-button></div><p class="result-text">函数式选择数量：{{ functionCount }}</p><BbImagesPicker v-model="readonlyImages" readonly :upload="false" /><BbImagesPicker v-model="readonlyImages" disabled :upload="false" /></section>
 </template>

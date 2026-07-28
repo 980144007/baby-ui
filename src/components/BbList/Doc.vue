@@ -1,25 +1,17 @@
 <script lang="ts">
-export const docMeta = {
-  name: 'BbList',
-  category: '数据展示',
-  summary: '基于下拉刷新和上拉加载的列表容器，支持内部或外部受控状态。',
-  order: 11,
-};
+export const docMeta = { name: 'BbList', category: '数据展示', summary: '基于 Vant PullRefresh/List 的列表容器，支持刷新、加载更多、受控状态和实例方法。', order: 11 };
 </script>
-
 <script setup lang="ts">
 import { ref } from 'vue';
 import BbList from './BbList.vue';
-
 defineOptions({ name: 'BbListDoc' });
-
-const listItems = ref(['出生信息', '喂养记录', '睡眠记录', '成长曲线']);
-const listFinished = ref(true);
-function onListRefresh() { listItems.value = ['刷新后的出生信息', '刷新后的喂养记录', '刷新后的睡眠记录']; listFinished.value = true; return Promise.resolve(true); }
-function onListLoadMore() { return Promise.resolve(true); }
+const listRef = ref<any>(null); const items = ref(['出生信息', '喂养记录', '睡眠记录']); const finished = ref(false); const controlledRefreshing = ref(false); const controlledLoading = ref(false); const controlledFinished = ref(true); const loadCount = ref(0); const errorText = ref('加载失败，点击此处重试');
+function onRefresh() { loadCount.value = 0; items.value = ['刷新后的出生信息', '刷新后的喂养记录', '刷新后的睡眠记录']; finished.value = false; return Promise.resolve(false); }
+function onLoadMore() { loadCount.value += 1; items.value.push(`加载更多记录 ${loadCount.value}`); return Promise.resolve(loadCount.value >= 2); }
+function onControlledRefresh() { controlledRefreshing.value = true; return new Promise<boolean>((resolve) => setTimeout(() => { controlledRefreshing.value = false; controlledFinished.value = true; resolve(true); }, 400)); }
 </script>
-
 <template>
-  <section class="doc-page" data-find-item="BbList"><div class="doc-header"><p class="eyebrow">数据展示</p><h2>BbList</h2><p>基于下拉刷新和上拉加载的列表容器，支持内部或外部受控状态。</p></div><div class="doc-block"><h3>基础用法</h3><pre><code>&lt;BbList :on-refresh=&quot;onRefresh&quot; :on-load-more=&quot;onLoadMore&quot;&gt;...&lt;/BbList&gt;</code></pre></div><div class="doc-block"><h3>Props</h3><div class="api-list"><div class="api-item"><code>onRefresh / onLoadMore</code><span>刷新和加载更多方法，返回 Promise。</span></div><div class="api-item"><code>refreshing / loadingMore / finished</code><span>可外部控制的加载状态。</span></div><div class="api-item"><code>autoLoad</code><span>是否自动触发加载。</span></div><div class="api-item"><code>useBackTop</code><span>是否显示返回顶部。</span></div><div class="api-item"><code>errorText / hideNoMore / delay</code><span>错误文案、无更多展示和延迟控制。</span></div></div></div><div class="doc-block"><h3>v-model / Slots / Methods</h3><div class="tag-list"><span class="doc-tag">v-model:refreshing</span><span class="doc-tag">v-model:loadingMore</span><span class="doc-tag">v-model:finished</span><span class="doc-tag">default</span><span class="doc-tag">refresh()</span><span class="doc-tag">check(isSingle)</span></div></div></section>
-  <section class="demo-section"><h2>BbList 示例</h2><div class="fixed-height-demo"><BbList :auto-load="false" :finished="listFinished" :on-refresh="onListRefresh" :on-load-more="onListLoadMore" :use-back-top="false"><van-cell v-for="item in listItems" :key="item" :title="item" /></BbList></div></section>
+  <section class="doc-page" data-find-item="BbList"><div class="doc-header"><p class="eyebrow">数据展示</p><h2>BbList</h2><p>BbList 封装下拉刷新、滚动加载、错误重试和返回顶部能力，适合移动端列表页。onRefresh/onLoadMore 需返回 Promise；resolve(true) 表示没有更多，reject 会进入错误状态。refreshing/loadingMore/finished 可不传由内部维护，也可通过 v-model 外部受控；固定高度容器内使用时请保证父级有明确高度。</p></div><div class="doc-block"><h3>基础用法</h3><pre><code>&lt;BbList ref=&quot;listRef&quot; :on-refresh=&quot;onRefresh&quot; :on-load-more=&quot;onLoadMore&quot;&gt;...&lt;/BbList&gt;</code></pre></div><div class="doc-block"><h3>Props</h3><div class="api-list"><div class="api-item"><code>onRefresh / onLoadMore</code><span>刷新/加载更多函数，返回 Promise；默认 undefined。</span></div><div class="api-item"><code>refreshing / loadingMore / finished</code><span>外部受控状态；默认 null，未传时内部维护。</span></div><div class="api-item"><code>autoLoad</code><span>是否自动检查加载更多；boolean，默认 true。</span></div><div class="api-item"><code>useBackTop</code><span>是否展示返回顶部；boolean，默认 true。</span></div><div class="api-item"><code>errorText / hideNoMore / delay</code><span>错误文案、隐藏无更多、检查延迟；默认“加载失败...”/false/200。</span></div></div></div><div class="doc-block"><h3>Events</h3><div class="tag-list"><span class="doc-tag">update:refreshing</span><span class="doc-tag">update:loadingMore</span><span class="doc-tag">update:finished</span></div></div><div class="doc-block"><h3>Slots</h3><div class="api-list"><div class="api-item"><code>default</code><span>列表内容。</span></div></div></div><div class="doc-block"><h3>Methods / Expose</h3><div class="tag-list"><span class="doc-tag">refresh()</span><span class="doc-tag">check(isSingle)</span></div></div></section>
+  <section class="demo-section"><h2>刷新 / 加载更多与 ref 方法</h2><div class="fixed-height-demo"><BbList ref="listRef" :auto-load="false" :finished="finished" :on-refresh="onRefresh" :on-load-more="onLoadMore" :use-back-top="false" :error-text="errorText"><van-cell v-for="item in items" :key="item" :title="item" /></BbList></div><div class="action-row"><van-button size="small" type="primary" @click="listRef?.refresh()">ref.refresh()</van-button><van-button size="small" plain @click="listRef?.check()">ref.check()</van-button></div></section>
+  <section class="demo-section"><h2>受控状态、错误和无更多提示</h2><div class="fixed-height-demo"><BbList v-model:refreshing="controlledRefreshing" v-model:loading-more="controlledLoading" v-model:finished="controlledFinished" :on-refresh="onControlledRefresh" :auto-load="false" error-text="网络异常，点击重试" hide-no-more :use-back-top="false"><van-cell title="受控状态示例" label="hideNoMore 隐藏没有更多提示" /></BbList></div></section>
 </template>

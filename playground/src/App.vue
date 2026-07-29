@@ -207,6 +207,55 @@ input {
   }
 }
 
+.doc-block > .demo-code {
+  margin-top: 0;
+}
+
+.demo-code {
+  margin-top: 14px;
+
+  pre {
+    max-height: 220px;
+    margin: 0;
+    overflow-x: auto;
+    overflow-y: auto;
+    border-radius: 0 0 12px 12px;
+    background: #101828;
+    padding: 12px;
+
+    &.expanded {
+      max-height: none;
+      overflow-y: visible;
+    }
+  }
+
+  pre code {
+    display: block;
+    min-width: max-content;
+    color: #f9fafb;
+    white-space: pre;
+  }
+}
+
+.demo-code-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.demo-code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-radius: 12px 12px 0 0;
+  background: #1f2937;
+  padding: 8px 10px;
+  color: #f9fafb;
+  font-size: 13px;
+  font-weight: 700;
+}
+
 .api-list {
   display: grid;
   gap: 8px;

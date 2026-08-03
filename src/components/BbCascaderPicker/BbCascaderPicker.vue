@@ -49,6 +49,15 @@ const emits = defineEmits(["onVisible", "update:modelValue", "confirm"]);
 watch(showPicker, (n) => {
   emits("onVisible", n);
 })
+const normalizedOptions = computed(() => {
+  const normalize = (list) => list.map((item) => ({
+    ...item,
+    text: item.text ?? item.label,
+    label: item.label ?? item.text,
+    ...(item.children ? { children: normalize(item.children) } : {})
+  }));
+  return normalize(props.options);
+})
 const selectedObj = computed(() => {
   const val = props.modelValue;
   const fn = (list) => {
@@ -63,7 +72,7 @@ const selectedObj = computed(() => {
     }
     return;
   }
-  return fn(props.options) || {};
+  return fn(normalizedOptions.value) || {};
 })
 const onConfirm = ({ value }) => {
   emits("update:modelValue", value);
@@ -109,7 +118,7 @@ const onShowChange = () => {
       </slot>
     </div>
     <van-popup v-model:show="showPicker" round position="bottom" teleport="body">
-      <van-cascader :modelValue="modelValue" :title="`请选择${label}`" :options="options" @close="showPicker = false"
+      <van-cascader :modelValue="modelValue" :title="`请选择${label}`" :options="normalizedOptions" @close="showPicker = false"
         @finish="onConfirm">
         <!-- <template #options-top>555</template> -->
       </van-cascader>

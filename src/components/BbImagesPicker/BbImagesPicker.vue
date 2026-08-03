@@ -112,9 +112,13 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  uploading: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-const emit = defineEmits(["update:modelValue", "cancel"]);
+const emit = defineEmits(["update:modelValue", "cancel", "update:uploading"]);
 const fileInputRef = ref<HTMLInputElement | null>(null);
 const fileList = ref<ImagePickerItem[]>(getFileList());
 function getFileList(): ImagePickerItem[] {
@@ -141,7 +145,15 @@ function getFileList(): ImagePickerItem[] {
     return list;
   }, []);
 }
-
+const uploading = computed(() => {
+  return fileList.value.some((v) => v.status === 'uploading');
+});
+watch(
+  () => uploading.value,
+  (val) => {
+    emit("update:uploading", val);
+  }
+);
 watch(
   () => props.modelValue,
   () => {

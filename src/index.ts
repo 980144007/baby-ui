@@ -8,6 +8,7 @@ import { getFileType } from './utils/file';
 export { default as Bb3DCube } from './components/Bb3DCube/Bb3DCube.vue';
 export { default as BbCascaderPicker } from './components/BbCascaderPicker/BbCascaderPicker.vue';
 export { BbDatePicker, showBbDatePicker } from './components/BbDatePicker';
+export { BbDateRangePicker } from './components/BbDateRangePicker';
 export { BbDateRangeFieldPicker, showBbDateRangePicker, showBbDateRangeFieldPicker } from './components/BbDateRangeFieldPicker';
 export { BbDialog, showBbDialog } from './components/BbDialog';
 export { default as BbFloatingButton } from './components/BbFloatingButton/BbFloatingButton.vue';
@@ -27,6 +28,7 @@ export { default as BbTabs } from './components/BbTabs/BbTabs.vue';
 import Bb3DCube from './components/Bb3DCube';
 import BbCascaderPicker from './components/BbCascaderPicker';
 import BbDatePicker from './components/BbDatePicker';
+import BbDateRangePicker from './components/BbDateRangePicker';
 import BbDateRangeFieldPicker from './components/BbDateRangeFieldPicker';
 import BbDialog from './components/BbDialog';
 import BbFloatingButton from './components/BbFloatingButton';
@@ -47,6 +49,7 @@ const components = [
   Bb3DCube,
   BbCascaderPicker,
   BbDatePicker,
+  BbDateRangePicker,
   BbDateRangeFieldPicker,
   BbDialog,
   BbFloatingButton,

@@ -36,7 +36,8 @@ function compileSfc(source: string) {
   if (descriptor.script || descriptor.scriptSetup) {
     const script = compileScript(descriptor, { id });
     bindings = script.bindings as typeof bindings;
-    scriptCode = rewriteDefault(script.content, '__sfc__');
+    const isTypeScript = descriptor.script?.lang === 'ts' || descriptor.scriptSetup?.lang === 'ts';
+    scriptCode = rewriteDefault(script.content, '__sfc__', isTypeScript ? ['typescript'] : undefined);
   }
 
   const template = compileTemplate({

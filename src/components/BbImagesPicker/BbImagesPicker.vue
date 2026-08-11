@@ -26,7 +26,7 @@
             <van-icon name="clear" size="14" color="#dddddd" />
           </div>
         </div>
-        <slot name="description" :item="item" :index="index" :modelIndex="modelValue.findIndex(nItem => (typeof nItem === 'string' ? nItem : nItem.url) === item.originalUrl)" />
+        <slot name="description" :item="item" :index="index" :modelIndex="getModelIndex(item)" />
       </div>
 
       <div
@@ -81,7 +81,7 @@ const props = defineProps({
     default: 3,
   },
   modelValue: {
-    type: Array as PropType<Array<string | ImageModelItem>>,
+    type: [Array, String, Object] as PropType<Array<string | ImageModelItem> | string | ImageModelItem>,
     default: () => [],
   },
   multiple: {
@@ -120,9 +120,10 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue", "cancel", "update:uploading"]);
 const fileInputRef = ref<HTMLInputElement | null>(null);
+const modelItems = () => Array.isArray(props.modelValue) ? props.modelValue : [props.modelValue];
 const fileList = ref<ImagePickerItem[]>(getFileList());
 function getFileList(): ImagePickerItem[] {
-  return $cloneDeep(props.multiple ? props.modelValue : [props.modelValue]).reduce<ImagePickerItem[]>((list, item) => {
+  return $cloneDeep(modelItems()).reduce<ImagePickerItem[]>((list, item) => {
     if (!item) return list;
     list.push(
       typeof item === "string"
@@ -192,13 +193,21 @@ const onFileChange = (e: Event) => {
       const reader = new FileReader();
       reader.onload = (ev) => {
         const base64 = ev.target.result;
-        fileList.value.push({ url: f.url, isImage: true, content: base64 });
-        emit("update:modelValue", props.multiple ? [...props.modelValue, base64] : base64);
+        const item = { url: f.url, isImage: true, content: base64 };
+        if (props.multiple) fileList.value.push(item);
+        else fileList.value = [item];
+        emit("update:modelValue", props.multiple ? [...modelItems(), base64] : base64);
       };
       reader.readAsDataURL(f.file);
     });
   }
 };
+
+function getModelIndex(item: ImagePickerItem) {
+  return modelItems().findIndex((modelItem) =>
+    (typeof modelItem === "string" ? modelItem : modelItem?.url) === item.originalUrl
+  );
+}
 
 const previewImage = (item: ImagePickerItem) => {
   if (item.status === 'uploading' || item.status === 'failed') return;
@@ -215,16 +224,14 @@ const handleDelete = (item: ImagePickerItem, index: number) => {
     $toast("请等待图片上传完成");
     return;
   }
-  const targetIndex = props.modelValue.findIndex((v) => {
+  const targetIndex = modelItems().findIndex((v) => {
     if (!v) return false;
     const rawUrl = typeof v === "string" ? v : v.url;
     return item.url.endsWith(rawUrl);
   });
   if (targetIndex > -1) {
-    emit(
-      "update:modelValue",
-      props.modelValue.filter((_, i) => i !== targetIndex)
-    );
+    const nextValue = modelItems().filter((_, i) => i !== targetIndex);
+    emit("update:modelValue", props.multiple ? nextValue : "");
   } else {
     fileList.value.splice(index, 1);
   }
@@ -257,7 +264,7 @@ function uploadImage(file) {
       item.status = "success";
       item.originalUrl = url;
       const result = props.returnObject ? {url} : url
-      emit("update:modelValue", props.multiple ? [...props.modelValue, result] : result);
+      emit("update:modelValue", props.multiple ? [...modelItems(), result] : result);
     })
     .catch(() => {
       item.status = "failed";

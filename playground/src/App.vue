@@ -37,7 +37,12 @@ const componentDocs: ComponentDoc[] = Object.entries(docModules)
   })
   .sort((a, b) => a.order - b.order || a.name.localeCompare(b.name));
 
-const selectedDoc = ref(componentDocs[0]?.name || "");
+const componentParam = new URLSearchParams(window.location.search).get("component");
+const selectedDoc = ref(
+  componentDocs.some((item) => item.name === componentParam)
+    ? componentParam!
+    : componentDocs[0]?.name || "",
+);
 const previewTitle = ref("请选择示例");
 const activeCode = ref("");
 const currentDoc = computed(
@@ -81,6 +86,16 @@ function handlePreviewMessage(event: MessageEvent) {
 }
 
 watch(activeCode, sendPreviewCode, { flush: "post" });
+watch(
+  selectedDoc,
+  (name) => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("component", name);
+    window.history.replaceState(null, "", url);
+    window.scrollTo({ top: 0, left: 0 });
+  },
+  { flush: "post", immediate: true },
+);
 onMounted(() => window.addEventListener("message", handlePreviewMessage));
 onBeforeUnmount(() => window.removeEventListener("message", handlePreviewMessage));
 </script>
@@ -178,17 +193,28 @@ textarea {
   padding: 20px 0 80px;
   align-items: start;
 }
-.sidebar,
 .preview-column {
   position: sticky;
   top: 20px;
   max-height: calc(100vh - 40px);
 }
 .sidebar {
+  position: fixed;
+  top: 20px;
+  bottom: 20px;
+  left: max(16px, calc((100vw - 1600px) / 2));
+  width: 220px;
   overflow: auto;
+  overscroll-behavior: contain;
   border-radius: 18px;
   background: #fff;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+.content-column {
+  grid-column: 2;
+}
+.preview-column {
+  grid-column: 3;
 }
 .brand {
   display: flex;
@@ -453,7 +479,14 @@ code {
   .sidebar {
     position: static;
     grid-column: 1 / -1;
+    width: auto;
     max-height: none;
+  }
+  .content-column {
+    grid-column: 1;
+  }
+  .preview-column {
+    grid-column: 2;
   }
   .brand {
     flex-direction: row;

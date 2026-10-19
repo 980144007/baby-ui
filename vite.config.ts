@@ -56,9 +56,9 @@ export default defineConfig({
       formats: ['es'],
     },
     rollupOptions: {
-      external: (id) => /^(vue|vant|dayjs|decimal\.js|lodash)(\/.*)?$/.test(id),
+      external: (id) => /^(vue|@vue\/[^/]+)(\/.*)?$/.test(id),
       output: {
-        entryFileNames: '[name].js',
+        entryFileNames: (chunk) => `${chunk.name.replace(/node_modules/g, 'vendor').replace(/\.pnpm/g, 'pnpm').replace(/[<>:"\\|?*&\x00-\x1f]/g, '_')}.js`,
         chunkFileNames: '[name].js',
         assetFileNames: '[name][extname]',
         preserveModules: true,
